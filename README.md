@@ -1,4 +1,4 @@
-# Veterinarian
+# Uvc back-end for Sneaky Golem
 
 1. Install docker to your system
 2. Run `docker compose up` and you are good to go
