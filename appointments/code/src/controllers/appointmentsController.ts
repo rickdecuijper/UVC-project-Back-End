@@ -71,13 +71,12 @@ export async function getAllApointments(req: Request, res: Response): Promise<vo
   res.status(200).send(appointmentResponse);
 }
 
-
 async function getApppointmentsByDay(day: number): Promise<Appointment[]> {
   console.log('What day is it?', day);
   const appointments: Appointment[] = await prisma.appointment.findMany(
     {
       where: {
-        theDateId: day
+        theDate: day
       }
     }
   );
@@ -85,18 +84,18 @@ async function getApppointmentsByDay(day: number): Promise<Appointment[]> {
   return appointments;
 }
 
-// async function getApppointmentsByMonth(month: number): Promise<Appointment[]> {
-//   const appointments: Appointment[] = await prisma.appointment.findMany(
-//     {
-//       where: {
-//         theDate: {
-//           month: month
-//         }
-//       }
-//     }
-//   );
-//   return appointments;
-// }
+async function getApppointmentsByMonth(month: number): Promise<Appointment[]> {
+  const appointments: Appointment[] = await prisma.appointment.findMany(
+    {
+      where: {
+        theDate: {
+          month: month
+        }
+      }
+    }
+  );
+  return appointments;
+}
 
 /**
  * Get an appointment by ID.
