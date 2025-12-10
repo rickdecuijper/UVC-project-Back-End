@@ -2,6 +2,7 @@ import Express, { NextFunction, Request, Response, Router } from 'express';
 import { createProxyMiddleware, fixRequestBody } from 'http-proxy-middleware';
 import type { Filter, Options, RequestHandler } from 'http-proxy-middleware';
 import { authenticateToken } from '../middleware/authentication/authenticate.ts';
+import authRoutes from "./auth.routes.ts";
 const router: Router = Express.Router();
 
 
@@ -32,6 +33,7 @@ const timeslotProxyMiddleware = createProxyMiddleware<Request, Response>({
   changeOrigin: true
 });
 
+router.use("/auth", authRoutes);
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.json('hi');
