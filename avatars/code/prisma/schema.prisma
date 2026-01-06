@@ -1,0 +1,18 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AvatarOnderdeel {
+  id         Int      @id @default(autoincrement())
+  naam       String
+  categorie  String   
+  waarde     Int      @default(0) 
+  afbeelding String   
+  hex_kleur  String?
+}
