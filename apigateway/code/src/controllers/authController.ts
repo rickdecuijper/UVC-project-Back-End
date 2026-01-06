@@ -34,13 +34,29 @@ export const login = async (req: Request, res: Response) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
+    // const token = jwt.sign(
+    //   { id: user.id, email: user.email },
+    //   process.env.JWT_SECRET!,
+    //   { expiresIn: "1h" }
+    // );
+
+    // res.json({ token });
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { userId: user.id },
       process.env.JWT_SECRET!,
-      { expiresIn: "1h" }
+      { expiresIn: '1h' }
     );
 
-    res.json({ token });
+    res.cookie('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
+    res.status(200).json({
+      message: 'Login successful',
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -64,3 +80,9 @@ export const me = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const logout = async (req: Request, res: Response) => {
+  //clears login token
+  res.clearCookie('auth_token');
+  res.status(200).json({ message: 'Logged out' });
+}

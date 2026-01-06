@@ -7,6 +7,16 @@
  * the createdAt field to be optional, it is genereated by Prisma.
  */
 
+import { JwtPayload } from 'jsonwebtoken';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: string | JwtPayload;
+    }
+  }
+}
+
 interface Client {
   id?: number,
   createdAt?: Date,
