@@ -45,6 +45,14 @@ const avatarProxyMiddleware = createProxyMiddleware<Request, Response>({
     }
 });
 
+const taskProxyMiddleware = createProxyMiddleware<Request, Response>({
+  target: 'http://appointments:3010/api/v1/tasks',
+  on: {
+    proxyReq: fixRequestBody,
+  },
+  changeOrigin: true
+});
+
 router.use("/auth", authRoutes);
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
@@ -55,6 +63,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 router.use('/owners', authenticateToken, clientProxyMiddleware);
 router.use('/appointments', appointmentProxyMiddleware);
 router.use('/timeslots',authenticateToken, timeslotProxyMiddleware);
+router.use('/tasks', authenticateToken, taskProxyMiddleware);
 
 
 // WIJZIGING: Routering voor de Avatar module, TIJDELIJK ZONDER authenticateToken
