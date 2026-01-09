@@ -1,22 +1,15 @@
 import Express, { Router } from 'express';
-import { getAllApointments, getApointmentById, setAppointment } from '../controllers/appointmentsController.ts';
-import { getAllTimeSlots, getTimeSlotById, getFreeTimeslots } from '../controllers/timeslotsController.ts';
-import { showRoutes } from '../controllers/mainController.ts';
 const router: Router = Express.Router();
 import Cors from 'cors';
+import { getTasks, getTaskById, setTask } from '../controllers/tasksController.ts';
 
 const currentApiVersion: string = 'v1';
 const apiSlug: string = '/api/' + currentApiVersion;
 
-router.get(`${apiSlug}/`, Cors(), showRoutes);
+router.get(`${apiSlug}/tasks`, Cors(), getTasks);
 
-router.get(`${apiSlug}/appointments`, Cors(), getAllApointments);
-router.post(`${apiSlug}/appointments`, Cors(), setAppointment);
-router.get(`${apiSlug}/appointments/:id`, Cors(), getApointmentById);
+router.get(`${apiSlug}/tasks/:id`, Cors(), getTaskById);
 
-router.get(`${apiSlug}/timeslots`, Cors(), getAllTimeSlots);
-router.get(`${apiSlug}/timeslots/:id`, Cors(), getTimeSlotById);
-router.get(`${apiSlug}/timeslots/free`, Cors(), getFreeTimeslots);
-
+router.post(`${apiSlug}/tasks`, Cors(), setTask);
 
 export default router;
