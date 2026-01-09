@@ -1,4 +1,24 @@
 services:
+  db:
+    container_name: postgres
+    image: postgres:14-alpine
+    restart: always
+    networks:
+      - veterinarian
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: veterinarian
+    ports:
+      - "5432:5432" 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d veterinarian"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   appointments:
     container_name: appointments
     build: ./appointments
@@ -9,7 +29,13 @@ services:
     ports:
       - "3010:3010"
     working_dir: /usr/src/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/veterinarian?schema=public
     command: bash -c "npm install && npm run dev"
+    depends_on:
+      db:
+        condition: service_healthy
+    
   clients:
     container_name: clients
     build: ./clients
@@ -20,7 +46,31 @@ services:
     ports:
       - "3012:3012"
     working_dir: /usr/src/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/veterinarian?schema=public
     command: bash -c "npm install && npm run dev"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  avatar:
+    container_name: avatar
+    build: ./avatars
+    volumes:
+      - ./avatars/code:/usr/src/app
+    networks:
+      - veterinarian
+    ports:
+      - "3014:3014"
+    working_dir: /usr/src/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/veterinarian?schema=public
+    # HERSTELD: Terug naar automatische opstart die stabiel bleek te zijn
+    command: bash -c "npm install && npm run dev" 
+    depends_on:
+      db:
+        condition: service_healthy
+  
   gateway:
     container_name: apigateway
     build: ./apigateway
@@ -28,10 +78,19 @@ services:
       - ./apigateway/code:/usr/src/app
     networks:
       - veterinarian
+    # GECORRIGEERD: Interne poort 3011, gemapt naar externe 3000
     ports:
-      - "3011:3011"
+      - "3000:3011" 
     working_dir: /usr/src/app
     command: bash -c "npm install && npm run dev"
+    depends_on:
+      - avatar
+      - appointments
+      - clients
+
+volumes:
+  postgres_data:
+    driver: local
 
 networks:
   veterinarian:
