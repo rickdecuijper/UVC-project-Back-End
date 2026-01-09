@@ -4,13 +4,19 @@ import * as Dotenv from 'dotenv';
 Dotenv.config({ path: '.env' });
 import IndexRouter from './routes/index.js';
 import { errorHandler } from './middleware/errors/errorHandler.js';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
 
 const app: Application = Express();
 const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3010;
 
 // support json encoded and url-encoded bodies, mainly used for post and update
+app.use(cors());
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 
 app.use('/', IndexRouter);
 
