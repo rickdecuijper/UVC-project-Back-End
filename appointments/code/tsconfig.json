@@ -19,7 +19,7 @@
     },
     "include": [
         "src/**/*",
-        "prisma/seed.ts", "prisma/types.ts", "prisma/seeders/task_seeder.ts",
+        "prisma/seed.ts", "prisma/types.ts",
     ],
     "exclude": [
         "node_modules",

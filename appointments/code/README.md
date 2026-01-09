@@ -3,12 +3,6 @@ This appointments micro service is part of larger whole, the veterinarian applic
 1. API Gateway (not implemented at this moment)
 2. Client information (not implemented at this moment)
 
-Step 1 - https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/sqlite
-Step 2 - remove the appointsments db and change / DATABASE_URL="file:./prisma/tasks.db"
-Step 3 - create the correct seeder
-Step 4 - update the prisma clinet
-
-
 ## Usage
 
 We will be using a `/api/v1/` base url.
