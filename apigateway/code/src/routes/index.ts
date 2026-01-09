@@ -32,14 +32,6 @@ const timeslotProxyMiddleware = createProxyMiddleware<Request, Response>({
   changeOrigin: true
 });
 
-const taskProxyMiddleware = createProxyMiddleware<Request, Response>({
-  target: 'http://appointments:3010/api/v1/tasks',
-  on: {
-    proxyReq: fixRequestBody,
-  },
-  changeOrigin: true
-});
-
 
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.json('hi');
@@ -49,6 +41,5 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 router.use('/owners', authenticateToken, clientProxyMiddleware);
 router.use('/appointments', appointmentProxyMiddleware);
 router.use('/timeslots',authenticateToken, timeslotProxyMiddleware);
-router.use('/tasks', authenticateToken, taskProxyMiddleware);
 
 export default router;
