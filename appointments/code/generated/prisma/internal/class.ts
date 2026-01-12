@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace.ts"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.1.0",
-  "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
+  "clientVersion": "7.2.0",
+  "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "sqlite",
   "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel Task {\n  id          Int      @id @default(autoincrement())\n  createdAt   DateTime @default(now())\n  title       String\n  description String\n  timeslot    Timeslot @relation(fields: [timeslotId], references: [id])\n  timeslotId  Int\n  status      String   @default(\"Nog niet gestart\")\n}\n\nmodel Timeslot {\n  id        Int      @id @default(autoincrement())\n  createdAt DateTime @default(now())\n  starttime String\n  endtime   String\n  Tasks     Task[]\n}\n",
   "runtimeDataModel": {
